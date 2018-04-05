@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ActivityIndicator, FlatList, StyleSheet } from 'react-native';
+import { Text, View, ActivityIndicator, FlatList, StyleSheet, TouchableHighlight } from 'react-native';
 
 class AlbumItem extends React.PureComponent {
     _onPress = () => {
@@ -15,7 +15,7 @@ class AlbumItem extends React.PureComponent {
           <View>
             <View style={styles.rowContainer}>
               <View style={styles.textContainer}>
-                <Text style={styles.price}>{price}</Text>
+                <Text>{title}</Text>
               </View>
             </View>
             <View style={styles.separator}/>
@@ -49,6 +49,16 @@ export default class Albums extends React.Component {
     this._getAlbums();
   }
 
+  _renderItem = ({item, index}) => {
+    return (
+      <AlbumItem
+        item={item}
+        index={index}
+        onPressItem={this._onPressItem}
+      />
+    );
+  };
+
   render(){
 
     if(this.state.isLoading){
@@ -63,7 +73,7 @@ export default class Albums extends React.Component {
       <View style={{flex: 1, paddingTop: 20}}>
         <FlatList
           data={this.state.dataSource}
-          renderItem={({item}) => <Text>{item.title}</Text>}
+          renderItem={this._renderItem}
           keyExtractor={(item, index) => index}
         />
       </View>
