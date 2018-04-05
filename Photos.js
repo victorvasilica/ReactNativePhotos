@@ -1,5 +1,33 @@
 import React from 'react';
-import { Text, View, ActivityIndicator, FlatList } from 'react-native';
+import { Text, View, ActivityIndicator, FlatList, StyleSheet, TouchableHighlight, Image } from 'react-native';
+
+class PhotoItem extends React.PureComponent {
+  _onPress = () => {
+    const item = this.props.item;
+    const index = this.props.index;
+
+    this.props.onPressItem(index, item);
+  }
+
+  render() {
+    const item = this.props.item;
+    const title = item.title;
+
+    return (
+      <TouchableHighlight onPress={this._onPress}>
+        <View>
+          <View style={styles.rowContainer}>
+            <Image style={styles.thumb} source={{ uri: item.url }} />
+            <View style={styles.textContainer}>
+              <Text>{title}</Text>
+            </View>
+          </View>
+          <View style={styles.separator}/>
+        </View>
+      </TouchableHighlight>  
+    );
+  }
+}
 
 export default class Photos extends React.Component {
   constructor(props) {
@@ -29,7 +57,13 @@ export default class Photos extends React.Component {
 
   _renderItem = ({item, index}) => {
     return (
-      <Text>{item.title}</Text>
+      <PhotoItem
+        item={item}
+        index={index}
+        onPressItem={() => {
+          //nothing yet
+        }}
+      />
     );
   };
 
@@ -54,3 +88,22 @@ export default class Photos extends React.Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  thumb: {
+    width: 80,
+    height: 80,
+    marginRight: 10
+  },
+  textContainer: {
+    flex: 1
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#dddddd'
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    padding: 10
+  }
+});
