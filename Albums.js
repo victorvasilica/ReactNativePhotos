@@ -56,6 +56,7 @@ export default class Albums extends React.Component {
   _onPressItem = (index, item) => {
     this.props.navigator.push({
         title: 'Album',
+        backButtonTitle: '',
         component: Photos,
         passProps: {album: item}
       });
