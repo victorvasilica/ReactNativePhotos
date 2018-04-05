@@ -69,6 +69,7 @@ export default class Photos extends React.Component {
   _onPressItem = (index, item) => {
     this.props.navigator.push({
         title: item.title,
+        backButtonTitle: '',
         component: PhotoDetails,
         passProps: {photo: item}
       });
