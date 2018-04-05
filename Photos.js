@@ -27,9 +27,30 @@ export default class Photos extends React.Component {
     });
   }
 
-  render() {
+  _renderItem = ({item, index}) => {
     return (
-        <View></View>
+      <Text>{item.title}</Text>
+    );
+  };
+
+  render(){
+
+    if(this.state.isLoading){
+      return(
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          <ActivityIndicator color='#0000ff'/>
+        </View>
+      )
+    }
+
+    return(
+      <View style={{flex: 1, paddingTop: 20}}>
+        <FlatList
+          data={this.state.dataSource}
+          renderItem={this._renderItem}
+          keyExtractor={(item, index) => index}
+        />
+      </View>
     );
   }
 }
