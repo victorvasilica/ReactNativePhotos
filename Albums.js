@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ActivityIndicator, FlatList } from 'react-native';
+import { Text, View, ActivityIndicator, FlatList, StyleSheet } from 'react-native';
 
 class AlbumItem extends React.PureComponent {
     _onPress = () => {
