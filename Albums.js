@@ -1,9 +1,13 @@
 import React from 'react';
 import { Text, View, ActivityIndicator, FlatList, StyleSheet, TouchableHighlight } from 'react-native';
+import Photos from './Photos';
 
 class AlbumItem extends React.PureComponent {
     _onPress = () => {
-      this.props.onPressItem(this.props.index);
+      const item = this.props.item;
+      const index = this.props.index;
+
+      this.props.onPressItem(index, item);
     }
   
     render() {
@@ -48,6 +52,14 @@ export default class Albums extends React.Component {
   componentDidMount() {
     this._getAlbums();
   }
+
+  _onPressItem = (index, item) => {
+    this.props.navigator.push({
+        title: 'Album',
+        component: Photos,
+        passProps: {album: item}
+      });
+   }
 
   _renderItem = ({item, index}) => {
     return (
