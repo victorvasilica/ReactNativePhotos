@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, View, ActivityIndicator, FlatList, StyleSheet, TouchableHighlight, Image } from 'react-native';
+import PhotoDetails from './PhotoDetails';
 
 class PhotoItem extends React.PureComponent {
   _onPress = () => {
@@ -66,6 +67,14 @@ export default class Photos extends React.Component {
       />
     );
   };
+
+  _onPressItem = (index, item) => {
+    this.props.navigator.push({
+        title: item.title,
+        component: PhotoDetails,
+        passProps: {photo: item}
+      });
+   }
 
   render(){
 
