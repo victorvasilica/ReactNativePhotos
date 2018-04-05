@@ -61,9 +61,7 @@ export default class Photos extends React.Component {
       <PhotoItem
         item={item}
         index={index}
-        onPressItem={() => {
-          //nothing yet
-        }}
+        onPressItem={this._onPressItem}
       />
     );
   };
