@@ -1,6 +1,30 @@
 import React from 'react';
 import { Text, View, ActivityIndicator, FlatList } from 'react-native';
 
+class AlbumItem extends React.PureComponent {
+    _onPress = () => {
+      this.props.onPressItem(this.props.index);
+    }
+  
+    render() {
+      const item = this.props.item;
+      const title = item.title;
+  
+      return (
+        <TouchableHighlight onPress={this._onPress}>
+          <View>
+            <View style={styles.rowContainer}>
+              <View style={styles.textContainer}>
+                <Text style={styles.price}>{price}</Text>
+              </View>
+            </View>
+            <View style={styles.separator}/>
+          </View>
+        </TouchableHighlight>  
+      );
+    }
+  }
+
 export default class Albums extends React.Component {
   constructor(props){
     super(props);
@@ -46,3 +70,17 @@ export default class Albums extends React.Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+    textContainer: {
+      flex: 1
+    },
+    separator: {
+      height: 1,
+      backgroundColor: '#dddddd'
+    },
+    rowContainer: {
+      flexDirection: 'row',
+      padding: 10
+    }
+  });
