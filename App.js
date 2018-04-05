@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationIOS } from 'react-native';
 import Albums from './Albums';
 
 export default class App extends React.Component {
