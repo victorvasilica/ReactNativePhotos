@@ -1,5 +1,33 @@
 import React from 'react';
-import { Text, View, ActivityIndicator, FlatList } from 'react-native';
+import { Text, View, ActivityIndicator, FlatList, StyleSheet, TouchableHighlight } from 'react-native';
+import Photos from './Photos';
+
+class AlbumItem extends React.PureComponent {
+    _onPress = () => {
+      const item = this.props.item;
+      const index = this.props.index;
+
+      this.props.onPressItem(index, item);
+    }
+  
+    render() {
+      const item = this.props.item;
+      const title = item.title;
+  
+      return (
+        <TouchableHighlight onPress={this._onPress}>
+          <View>
+            <View style={styles.rowContainer}>
+              <View style={styles.textContainer}>
+                <Text>{title}</Text>
+              </View>
+            </View>
+            <View style={styles.separator}/>
+          </View>
+        </TouchableHighlight>  
+      );
+    }
+  }
 
 export default class Albums extends React.Component {
   constructor(props){
@@ -25,6 +53,24 @@ export default class Albums extends React.Component {
     this._getAlbums();
   }
 
+  _onPressItem = (index, item) => {
+    this.props.navigator.push({
+        title: 'Album',
+        component: Photos,
+        passProps: {album: item}
+      });
+   }
+
+  _renderItem = ({item, index}) => {
+    return (
+      <AlbumItem
+        item={item}
+        index={index}
+        onPressItem={this._onPressItem}
+      />
+    );
+  };
+
   render(){
 
     if(this.state.isLoading){
@@ -39,10 +85,24 @@ export default class Albums extends React.Component {
       <View style={{flex: 1, paddingTop: 20}}>
         <FlatList
           data={this.state.dataSource}
-          renderItem={({item}) => <Text>{item.title}</Text>}
+          renderItem={this._renderItem}
           keyExtractor={(item, index) => index}
         />
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+    textContainer: {
+      flex: 1
+    },
+    separator: {
+      height: 1,
+      backgroundColor: '#dddddd'
+    },
+    rowContainer: {
+      flexDirection: 'row',
+      padding: 10
+    }
+  });
