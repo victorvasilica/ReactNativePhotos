@@ -5,63 +5,40 @@ import PropTypes from 'prop-types';
 import Photos from './Photos';
 
 class AlbumItem extends React.PureComponent {
-    _onPress = () => {
-      const item = this.props.item;
-      const index = this.props.index;
+  render() {
+    const item = this.props.item;
+    const title = item.title;
 
-      this.props.onPressItem(index, item);
-    }
-  
-    render() {
-      const item = this.props.item;
-      const title = item.title;
-  
-      return (
-        <TouchableHighlight onPress={this._onPress}>
-          <View>
-            <View style={styles.rowContainer}>
-              <View style={styles.textContainer}>
-                <Text>{title}</Text>
-              </View>
+    return (
+      <TouchableHighlight onPress={this._onPress}>
+        <View>
+          <View style={styles.rowContainer}>
+            <View style={styles.textContainer}>
+              <Text>{title}</Text>
             </View>
-            <View style={styles.separator}/>
           </View>
-        </TouchableHighlight>  
-      );
-    }
+          <View style={styles.separator} />
+        </View>
+      </TouchableHighlight>
+    );
   }
+
+  _onPress = () => {
+    const item = this.props.item;
+    const index = this.props.index;
+
+    this.props.onPressItem(index, item);
+  }
+}
 
 export default class Albums extends React.Component {
-  constructor(props){
-    super(props);
-    // this.state = {isLoading: false}
-  }
-
-  _getAlbums(store) {
-    store.dispatch({
-      type: 'FETCH_ALBUMS'
-    })
-
-    return fetch('https://jsonplaceholder.typicode.com/albums')
-    .then((response) => response.json())
-    .then((responseJson) => {
-      store.dispatch({
-        type: 'UPDATE_ALBUMS',
-        albums: responseJson
-      });
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-  }
-
   componentDidMount() {
-    const { store } = this.context;
+    const store = this.context.store;
 
     this.unsubscribe = store.subscribe(() => {
       this.forceUpdate();
     });
-    
+
     this._getAlbums(store);
   }
 
@@ -69,16 +46,50 @@ export default class Albums extends React.Component {
     this.unsubscribe();
   }
 
-  _onPressItem = (index, item) => {
-    this.props.navigator.push({
-        title: 'Album',
-        backButtonTitle: '',
-        component: Photos,
-        passProps: {album: item}
-      });
-   }
+  render() {
+    const store = this.context.store;
+    const state = store.getState();
 
-  _renderItem = ({item, index}) => {
+    if (state.albums.isLoading) {
+      return (
+        <View style={styles.activityIndicator}>
+          <ActivityIndicator color='#0000ff' />
+        </View>
+      )
+    }
+
+    return (
+      <View style={styles.container}>
+        <FlatList
+          data={state.albums.data}
+          renderItem={this._renderItem}
+          keyExtractor={(item, index) => index}
+        />
+      </View>
+    );
+  }
+
+  _getAlbums(store) {
+    store.dispatch({
+      type: 'FETCH_ALBUMS'
+    })
+
+    const url = 'https://jsonplaceholder.typicode.com/albums';
+
+    return fetch(url)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        store.dispatch({
+          type: 'UPDATE_ALBUMS',
+          albums: responseJson
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  _renderItem = ({ item, index }) => {
     return (
       <AlbumItem
         item={item}
@@ -88,27 +99,13 @@ export default class Albums extends React.Component {
     );
   };
 
-  render() {
-    const { store } = this.context;
-    const state = store.getState();
-
-    if(state.albums.isLoading) {
-      return(
-        <View style={{flex: 1, justifyContent: 'center'}}>
-          <ActivityIndicator color='#0000ff'/>
-        </View>
-      )
-    }
-
-    return(
-      <View style={{flex: 1, paddingTop: 20}}>
-        <FlatList
-          data={state.albums.data}
-          renderItem={this._renderItem}
-          keyExtractor={(item, index) => index}
-        />
-      </View>
-    );
+  _onPressItem = (index, item) => {
+    this.props.navigator.push({
+      title: 'Album',
+      backButtonTitle: '',
+      component: Photos,
+      passProps: { album: item }
+    });
   }
 }
 
@@ -117,15 +114,23 @@ Albums.contextTypes = {
 };
 
 const styles = StyleSheet.create({
-    textContainer: {
-      flex: 1
-    },
-    separator: {
-      height: 1,
-      backgroundColor: '#dddddd'
-    },
-    rowContainer: {
-      flexDirection: 'row',
-      padding: 10
-    }
-  });
+  container: {
+    flex: 1,
+    paddingTop: 20
+  },
+  textContainer: {
+    flex: 1
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#dddddd'
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    padding: 10
+  },
+  activityIndicator: {
+    flex: 1,
+    justifyContent: 'center'
+  }
+});

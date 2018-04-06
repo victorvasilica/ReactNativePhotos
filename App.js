@@ -15,7 +15,7 @@ const defaultState = {
   }
 }
 
-const fetcher = (state = defaultState, action) => {
+const photosApp = (state = defaultState, action) => {
   switch (action.type) {
     case 'FETCH_ALBUMS':
       return {
@@ -58,7 +58,7 @@ export default class App extends React.Component {
   render() {
     console.log(defaultState);
     return (
-      <Provider store={createStore(fetcher)}>
+      <Provider store={createStore(photosApp)}>
         <NavigatorIOS
           style={styles.container}
           translucent={false}
