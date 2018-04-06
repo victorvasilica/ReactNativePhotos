@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, View, ActivityIndicator, FlatList, StyleSheet, TouchableHighlight, Image } from 'react-native';
+import PropTypes from 'prop-types';
 import PhotoDetails from './PhotoDetails';
 
 class PhotoItem extends React.PureComponent {
@@ -33,22 +34,35 @@ class PhotoItem extends React.PureComponent {
 export default class Photos extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {isLoading: true}
   }
 
   componentDidMount() {
-    this._getPhotos(this.props.album.id)
+    const { store } = this.context;
+
+    this.unsubscribe = store.subscribe(() => {
+      this.forceUpdate();
+    });
+    
+    this._getPhotos(this.props.album.id, store);
   }
 
-  _getPhotos(albumId) {
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
+  _getPhotos(albumId, store) {
+    store.dispatch({
+      type: 'FETCH_PHOTOS'
+    })
+
     const url = 'https://jsonplaceholder.typicode.com/albums/' + albumId + '/photos';
 
     return fetch(url)
     .then((response) => response.json())
     .then((responseJson) => {
-      this.setState({
-        isLoading: false,
-        dataSource: responseJson,
+      store.dispatch({
+        type: 'UPDATE_PHOTOS',
+        photos: responseJson
       });
     })
     .catch((error) => {
@@ -76,8 +90,10 @@ export default class Photos extends React.Component {
    }
 
   render(){
+    const { store } = this.context;
+    const state = store.getState();
 
-    if(this.state.isLoading){
+    if(state.photos.isLoading){
       return(
         <View style={{flex: 1, justifyContent: 'center'}}>
           <ActivityIndicator color='#0000ff'/>
@@ -88,7 +104,7 @@ export default class Photos extends React.Component {
     return(
       <View style={{flex: 1, paddingTop: 20}}>
         <FlatList
-          data={this.state.dataSource}
+          data={state.photos.data}
           renderItem={this._renderItem}
           keyExtractor={(item, index) => index}
         />
@@ -96,6 +112,10 @@ export default class Photos extends React.Component {
     );
   }
 }
+
+Photos.contextTypes = {
+  store: PropTypes.object
+};
 
 const styles = StyleSheet.create({
   thumb: {
