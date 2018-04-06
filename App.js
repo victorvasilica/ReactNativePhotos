@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, NavigatorIOS } from 'react-native';
+import { StyleSheet, NavigatorIOS, StatusBar } from 'react-native';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import Albums from './Albums';
@@ -56,14 +56,19 @@ const photosApp = (state = defaultState, action) => {
 
 export default class App extends React.Component {
   render() {
-    console.log(defaultState);
+    StatusBar.setBarStyle('light-content', true);
+
     return (
       <Provider store={createStore(photosApp)}>
         <NavigatorIOS
           style={styles.container}
           translucent={false}
+          barTintColor='#03A9F4'
+          tintColor='#ffffff'
+          titleTextColor='#ffffff'
           initialRoute={{
-            title: '',
+            title: 'Albums',
+            backButtonTitle: ' ',
             component: Albums
           }}/>
         </Provider>
