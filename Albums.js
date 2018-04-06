@@ -112,23 +112,23 @@ Albums.contextTypes = {
 };
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1, 
-      paddingTop: 20
-    },
-    textContainer: {
-      flex: 1
-    },
-    separator: {
-      height: 1,
-      backgroundColor: '#dddddd'
-    },
-    rowContainer: {
-      flexDirection: 'row',
-      padding: 10
-    },
-    activityIndicator: {
-      flex: 1,
-      justifyContent: 'center'
-    }
+  container: {
+    flex: 1, 
+    paddingTop: 20
+  },
+  textContainer: {
+    flex: 1
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#dddddd'
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    padding: 10
+  },
+  activityIndicator: {
+    flex: 1,
+    justifyContent: 'center'
+  }
   });
