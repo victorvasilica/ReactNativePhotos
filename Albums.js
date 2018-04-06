@@ -59,7 +59,7 @@ export default class Albums extends React.Component {
     }
 
     return(
-      <View style={{flex: 1, paddingTop: 20}}>
+      <View style={styles.container}>
         <FlatList
           data={state.albums.data}
           renderItem={this._renderItem}
@@ -112,6 +112,10 @@ Albums.contextTypes = {
 };
 
 const styles = StyleSheet.create({
+    container: {
+      flex: 1, 
+      paddingTop: 20
+    },
     textContainer: {
       flex: 1
     },
