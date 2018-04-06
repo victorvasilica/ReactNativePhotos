@@ -46,6 +46,29 @@ export default class Albums extends React.Component {
     this.unsubscribe();
   }
 
+  render() {
+    const { store } = this.context;
+    const state = store.getState();
+
+    if(state.albums.isLoading) {
+      return(
+        <View style={styles.activityIndicator}>
+          <ActivityIndicator color='#0000ff'/>
+        </View>
+      )
+    }
+
+    return(
+      <View style={{flex: 1, paddingTop: 20}}>
+        <FlatList
+          data={state.albums.data}
+          renderItem={this._renderItem}
+          keyExtractor={(item, index) => index}
+        />
+      </View>
+    );
+  }
+
   _getAlbums(store) {
     store.dispatch({
       type: 'FETCH_ALBUMS'
@@ -82,29 +105,6 @@ export default class Albums extends React.Component {
       />
     );
   };
-
-  render() {
-    const { store } = this.context;
-    const state = store.getState();
-
-    if(state.albums.isLoading) {
-      return(
-        <View style={{flex: 1, justifyContent: 'center'}}>
-          <ActivityIndicator color='#0000ff'/>
-        </View>
-      )
-    }
-
-    return(
-      <View style={{flex: 1, paddingTop: 20}}>
-        <FlatList
-          data={state.albums.data}
-          renderItem={this._renderItem}
-          keyExtractor={(item, index) => index}
-        />
-      </View>
-    );
-  }
 }
 
 Albums.contextTypes = {
@@ -122,5 +122,9 @@ const styles = StyleSheet.create({
     rowContainer: {
       flexDirection: 'row',
       padding: 10
+    },
+    activityIndicator: {
+      flex: 1,
+      justifyContent: 'center'
     }
   });
