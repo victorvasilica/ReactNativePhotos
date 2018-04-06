@@ -32,9 +32,18 @@ class AlbumItem extends React.PureComponent {
 }
 
 export default class Albums extends React.Component {
-  constructor(props){
-    super(props);
-    // this.state = {isLoading: false}
+  componentDidMount() {
+    const { store } = this.context;
+
+    this.unsubscribe = store.subscribe(() => {
+      this.forceUpdate();
+    });
+    
+    this._getAlbums(store);
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
   }
 
   _getAlbums(store) {
@@ -53,20 +62,6 @@ export default class Albums extends React.Component {
     .catch((error) => {
       console.error(error);
     });
-  }
-
-  componentDidMount() {
-    const { store } = this.context;
-
-    this.unsubscribe = store.subscribe(() => {
-      this.forceUpdate();
-    });
-    
-    this._getAlbums(store);
-  }
-
-  componentWillUnmount() {
-    this.unsubscribe();
   }
 
   _onPressItem = (index, item) => {
