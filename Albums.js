@@ -74,7 +74,9 @@ export default class Albums extends React.Component {
       type: 'FETCH_ALBUMS'
     })
 
-    return fetch('https://jsonplaceholder.typicode.com/albums')
+    const url = 'https://jsonplaceholder.typicode.com/albums';
+
+    return fetch(url)
       .then((response) => response.json())
       .then((responseJson) => {
         store.dispatch({
