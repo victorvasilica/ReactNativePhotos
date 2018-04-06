@@ -46,6 +46,29 @@ export default class Photos extends React.Component {
     this.unsubscribe();
   }
 
+  render() {
+    const { store } = this.context;
+    const state = store.getState();
+
+    if (state.photos.isLoading) {
+      return (
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+          <ActivityIndicator color='#0000ff' />
+        </View>
+      )
+    }
+
+    return (
+      <View style={{ flex: 1, paddingTop: 20 }}>
+        <FlatList
+          data={state.photos.data}
+          renderItem={this._renderItem}
+          keyExtractor={(item, index) => index}
+        />
+      </View>
+    );
+  }
+
   _getPhotos(albumId, store) {
     store.dispatch({
       type: 'FETCH_PHOTOS'
@@ -83,29 +106,6 @@ export default class Photos extends React.Component {
       component: PhotoDetails,
       passProps: { photo: item }
     });
-  }
-
-  render() {
-    const { store } = this.context;
-    const state = store.getState();
-
-    if (state.photos.isLoading) {
-      return (
-        <View style={{ flex: 1, justifyContent: 'center' }}>
-          <ActivityIndicator color='#0000ff' />
-        </View>
-      )
-    }
-
-    return (
-      <View style={{ flex: 1, paddingTop: 20 }}>
-        <FlatList
-          data={state.photos.data}
-          renderItem={this._renderItem}
-          keyExtractor={(item, index) => index}
-        />
-      </View>
-    );
   }
 }
 
