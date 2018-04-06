@@ -24,9 +24,9 @@ class AlbumItem extends React.PureComponent {
               <Text>{title}</Text>
             </View>
           </View>
-          <View style={styles.separator}/>
+          <View style={styles.separator} />
         </View>
-      </TouchableHighlight>  
+      </TouchableHighlight>
     );
   }
 }
@@ -38,7 +38,7 @@ export default class Albums extends React.Component {
     this.unsubscribe = store.subscribe(() => {
       this.forceUpdate();
     });
-    
+
     this._getAlbums(store);
   }
 
@@ -50,15 +50,15 @@ export default class Albums extends React.Component {
     const { store } = this.context;
     const state = store.getState();
 
-    if(state.albums.isLoading) {
-      return(
+    if (state.albums.isLoading) {
+      return (
         <View style={styles.activityIndicator}>
-          <ActivityIndicator color='#0000ff'/>
+          <ActivityIndicator color='#0000ff' />
         </View>
       )
     }
 
-    return(
+    return (
       <View style={styles.container}>
         <FlatList
           data={state.albums.data}
@@ -75,28 +75,28 @@ export default class Albums extends React.Component {
     })
 
     return fetch('https://jsonplaceholder.typicode.com/albums')
-    .then((response) => response.json())
-    .then((responseJson) => {
-      store.dispatch({
-        type: 'UPDATE_ALBUMS',
-        albums: responseJson
+      .then((response) => response.json())
+      .then((responseJson) => {
+        store.dispatch({
+          type: 'UPDATE_ALBUMS',
+          albums: responseJson
+        });
+      })
+      .catch((error) => {
+        console.error(error);
       });
-    })
-    .catch((error) => {
-      console.error(error);
-    });
   }
 
   _onPressItem = (index, item) => {
     this.props.navigator.push({
-        title: 'Album',
-        backButtonTitle: '',
-        component: Photos,
-        passProps: {album: item}
-      });
-   }
+      title: 'Album',
+      backButtonTitle: '',
+      component: Photos,
+      passProps: { album: item }
+    });
+  }
 
-  _renderItem = ({item, index}) => {
+  _renderItem = ({ item, index }) => {
     return (
       <AlbumItem
         item={item}
@@ -113,7 +113,7 @@ Albums.contextTypes = {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
+    flex: 1,
     paddingTop: 20
   },
   textContainer: {
@@ -131,4 +131,4 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center'
   }
-  });
+});
