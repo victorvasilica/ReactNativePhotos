@@ -1,15 +1,9 @@
 import React from 'react';
 import { Text, View, ActivityIndicator, FlatList, StyleSheet, TouchableHighlight, Image } from 'react-native';
+import PropTypes from 'prop-types';
 import PhotoDetails from './PhotoDetails';
 
 class PhotoItem extends React.PureComponent {
-  _onPress = () => {
-    const item = this.props.item;
-    const index = this.props.index;
-
-    this.props.onPressItem(index, item);
-  }
-
   render() {
     const item = this.props.item;
     const title = item.title;
@@ -18,45 +12,84 @@ class PhotoItem extends React.PureComponent {
       <TouchableHighlight onPress={this._onPress}>
         <View>
           <View style={styles.rowContainer}>
-            <Image style={styles.thumb} source={{ uri: item.url }} />
+            <Image style={styles.thumb} source={{ uri: item.thumbnailUrl }} />
             <View style={styles.textContainer}>
               <Text>{title}</Text>
             </View>
           </View>
-          <View style={styles.separator}/>
+          <View style={styles.separator} />
         </View>
-      </TouchableHighlight>  
+      </TouchableHighlight>
     );
+  }
+
+  _onPress = () => {
+    const item = this.props.item;
+    const index = this.props.index;
+
+    this.props.onPressItem(index, item);
   }
 }
 
 export default class Photos extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {isLoading: true}
-  }
-
   componentDidMount() {
-    this._getPhotos(this.props.album.id)
+    const store  = this.context.store;
+
+    this.unsubscribe = store.subscribe(() => {
+      this.forceUpdate();
+    });
+
+    this._getPhotos(this.props.album.id, store);
   }
 
-  _getPhotos(albumId) {
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
+  render() {
+    const store = this.context.store;
+    const state = store.getState();
+
+    if (state.photos.isLoading) {
+      return (
+        <View style={styles.activityIndicator}>
+          <ActivityIndicator color='#0000ff' />
+        </View>
+      )
+    }
+
+    return (
+      <View style={styles.container}>
+        <FlatList
+          data={state.photos.data}
+          renderItem={this._renderItem}
+          keyExtractor={(item, index) => index}
+        />
+      </View>
+    );
+  }
+
+  _getPhotos(albumId, store) {
+    store.dispatch({
+      type: 'FETCH_PHOTOS'
+    })
+
     const url = 'https://jsonplaceholder.typicode.com/albums/' + albumId + '/photos';
 
     return fetch(url)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      this.setState({
-        isLoading: false,
-        dataSource: responseJson,
+      .then((response) => response.json())
+      .then((responseJson) => {
+        store.dispatch({
+          type: 'UPDATE_PHOTOS',
+          photos: responseJson
+        });
+      })
+      .catch((error) => {
+        console.error(error);
       });
-    })
-    .catch((error) => {
-      console.error(error);
-    });
   }
 
-  _renderItem = ({item, index}) => {
+  _renderItem = ({ item, index }) => {
     return (
       <PhotoItem
         item={item}
@@ -68,36 +101,23 @@ export default class Photos extends React.Component {
 
   _onPressItem = (index, item) => {
     this.props.navigator.push({
-        title: item.title,
-        backButtonTitle: '',
-        component: PhotoDetails,
-        passProps: {photo: item}
-      });
-   }
-
-  render(){
-
-    if(this.state.isLoading){
-      return(
-        <View style={{flex: 1, justifyContent: 'center'}}>
-          <ActivityIndicator color='#0000ff'/>
-        </View>
-      )
-    }
-
-    return(
-      <View style={{flex: 1, paddingTop: 20}}>
-        <FlatList
-          data={this.state.dataSource}
-          renderItem={this._renderItem}
-          keyExtractor={(item, index) => index}
-        />
-      </View>
-    );
+      title: item.title,
+      backButtonTitle: '',
+      component: PhotoDetails,
+      passProps: { photo: item }
+    });
   }
 }
 
+Photos.contextTypes = {
+  store: PropTypes.object
+};
+
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 20
+  },
   thumb: {
     width: 80,
     height: 80,
@@ -113,5 +133,9 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'row',
     padding: 10
+  },
+  activityIndicator: {
+    flex: 1, 
+    justifyContent: 'center'
   }
 });
