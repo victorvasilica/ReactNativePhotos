@@ -19,7 +19,7 @@ class PhotoItem extends React.PureComponent {
       <TouchableHighlight onPress={this._onPress}>
         <View>
           <View style={styles.rowContainer}>
-            <Image style={styles.thumb} source={{ uri: item.url }} />
+            <Image style={styles.thumb} source={{ uri: item.thumbnailUrl }} />
             <View style={styles.textContainer}>
               <Text>{title}</Text>
             </View>
