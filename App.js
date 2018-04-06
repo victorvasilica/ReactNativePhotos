@@ -64,9 +64,11 @@ export default class App extends React.Component {
           style={styles.container}
           translucent={false}
           barTintColor='#03A9F4'
+          tintColor='#ffffff'
           titleTextColor='#ffffff'
           initialRoute={{
             title: 'Albums',
+            backButtonTitle: ' ',
             component: Albums
           }}/>
         </Provider>
