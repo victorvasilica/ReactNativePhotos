@@ -87,15 +87,6 @@ export default class Albums extends React.Component {
       });
   }
 
-  _onPressItem = (index, item) => {
-    this.props.navigator.push({
-      title: 'Album',
-      backButtonTitle: '',
-      component: Photos,
-      passProps: { album: item }
-    });
-  }
-
   _renderItem = ({ item, index }) => {
     return (
       <AlbumItem
@@ -105,6 +96,15 @@ export default class Albums extends React.Component {
       />
     );
   };
+
+  _onPressItem = (index, item) => {
+    this.props.navigator.push({
+      title: 'Album',
+      backButtonTitle: '',
+      component: Photos,
+      passProps: { album: item }
+    });
+  }
 }
 
 Albums.contextTypes = {
