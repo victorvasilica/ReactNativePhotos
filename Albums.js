@@ -5,31 +5,31 @@ import PropTypes from 'prop-types';
 import Photos from './Photos';
 
 class AlbumItem extends React.PureComponent {
-    _onPress = () => {
-      const item = this.props.item;
-      const index = this.props.index;
+  _onPress = () => {
+    const item = this.props.item;
+    const index = this.props.index;
 
-      this.props.onPressItem(index, item);
-    }
-  
-    render() {
-      const item = this.props.item;
-      const title = item.title;
-  
-      return (
-        <TouchableHighlight onPress={this._onPress}>
-          <View>
-            <View style={styles.rowContainer}>
-              <View style={styles.textContainer}>
-                <Text>{title}</Text>
-              </View>
-            </View>
-            <View style={styles.separator}/>
-          </View>
-        </TouchableHighlight>  
-      );
-    }
+    this.props.onPressItem(index, item);
   }
+
+  render() {
+    const item = this.props.item;
+    const title = item.title;
+
+    return (
+      <TouchableHighlight onPress={this._onPress}>
+        <View>
+          <View style={styles.rowContainer}>
+            <View style={styles.textContainer}>
+              <Text>{title}</Text>
+            </View>
+          </View>
+          <View style={styles.separator}/>
+        </View>
+      </TouchableHighlight>  
+    );
+  }
+}
 
 export default class Albums extends React.Component {
   constructor(props){
