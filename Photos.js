@@ -63,7 +63,7 @@ export default class Photos extends React.Component {
         <FlatList
           data={state.photos.data}
           renderItem={this._renderItem}
-          keyExtractor={(item, index) => index}
+          keyExtractor={(item, index) => index.toString()}
         />
       </View>
     );
