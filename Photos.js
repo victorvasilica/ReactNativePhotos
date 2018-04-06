@@ -4,13 +4,6 @@ import PropTypes from 'prop-types';
 import PhotoDetails from './PhotoDetails';
 
 class PhotoItem extends React.PureComponent {
-  _onPress = () => {
-    const item = this.props.item;
-    const index = this.props.index;
-
-    this.props.onPressItem(index, item);
-  }
-
   render() {
     const item = this.props.item;
     const title = item.title;
@@ -28,6 +21,13 @@ class PhotoItem extends React.PureComponent {
         </View>
       </TouchableHighlight>
     );
+  }
+
+  _onPress = () => {
+    const item = this.props.item;
+    const index = this.props.index;
+
+    this.props.onPressItem(index, item);
   }
 }
 
