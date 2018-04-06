@@ -52,14 +52,14 @@ export default class Photos extends React.Component {
 
     if (state.photos.isLoading) {
       return (
-        <View style={{ flex: 1, justifyContent: 'center' }}>
+        <View style={styles.activityIndicator}>
           <ActivityIndicator color='#0000ff' />
         </View>
       )
     }
 
     return (
-      <View style={{ flex: 1, paddingTop: 20 }}>
+      <View style={styles.container}>
         <FlatList
           data={state.photos.data}
           renderItem={this._renderItem}
@@ -114,6 +114,10 @@ Photos.contextTypes = {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 20
+  },
   thumb: {
     width: 80,
     height: 80,
@@ -129,5 +133,9 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'row',
     padding: 10
+  },
+  activityIndicator: {
+    flex: 1, 
+    justifyContent: 'center'
   }
 });
