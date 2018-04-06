@@ -61,6 +61,7 @@ export default class App extends React.Component {
       <Provider store={createStore(fetcher)}>
         <NavigatorIOS
           style={styles.container}
+          translucent={false}
           initialRoute={{
             title: '',
             component: Albums
