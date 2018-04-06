@@ -1,5 +1,7 @@
 import React from 'react';
 import { Text, View, ActivityIndicator, FlatList, StyleSheet, TouchableHighlight } from 'react-native';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import Photos from './Photos';
 
 class AlbumItem extends React.PureComponent {
@@ -32,16 +34,20 @@ class AlbumItem extends React.PureComponent {
 export default class Albums extends React.Component {
   constructor(props){
     super(props);
-    this.state = {isLoading: true}
+    // this.state = {isLoading: false}
   }
 
-  _getAlbums() {
+  _getAlbums(store) {
+    store.dispatch({
+      type: 'FETCH_ALBUMS'
+    })
+
     return fetch('https://jsonplaceholder.typicode.com/albums')
     .then((response) => response.json())
     .then((responseJson) => {
-      this.setState({
-        isLoading: false,
-        dataSource: responseJson,
+      store.dispatch({
+        type: 'UPDATE_ALBUMS',
+        albums: responseJson
       });
     })
     .catch((error) => {
@@ -50,7 +56,17 @@ export default class Albums extends React.Component {
   }
 
   componentDidMount() {
-    this._getAlbums();
+    const { store } = this.context;
+
+    this.unsubscribe = store.subscribe(() => {
+      this.forceUpdate();
+    });
+    
+    this._getAlbums(store);
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
   }
 
   _onPressItem = (index, item) => {
@@ -72,9 +88,11 @@ export default class Albums extends React.Component {
     );
   };
 
-  render(){
+  render() {
+    const { store } = this.context;
+    const state = store.getState();
 
-    if(this.state.isLoading){
+    if(state.albums.isLoading) {
       return(
         <View style={{flex: 1, justifyContent: 'center'}}>
           <ActivityIndicator color='#0000ff'/>
@@ -85,7 +103,7 @@ export default class Albums extends React.Component {
     return(
       <View style={{flex: 1, paddingTop: 20}}>
         <FlatList
-          data={this.state.dataSource}
+          data={state.albums.data}
           renderItem={this._renderItem}
           keyExtractor={(item, index) => index}
         />
@@ -93,6 +111,10 @@ export default class Albums extends React.Component {
     );
   }
 }
+
+Albums.contextTypes = {
+  store: PropTypes.object
+};
 
 const styles = StyleSheet.create({
     textContainer: {
