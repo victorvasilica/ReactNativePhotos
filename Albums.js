@@ -38,11 +38,15 @@ export default class Albums extends React.Component {
   }
 
   _getAlbums(store) {
+    store.dispatch({
+      type: 'FETCH_ALBUMS'
+    })
+
     return fetch('https://jsonplaceholder.typicode.com/albums')
     .then((response) => response.json())
     .then((responseJson) => {
       store.dispatch({
-        type: 'FETCH_ALBUMS',
+        type: 'UPDATE_ALBUMS',
         albums: responseJson
       });
     })
@@ -88,18 +92,18 @@ export default class Albums extends React.Component {
     const { store } = this.context;
     const state = store.getState();
 
-    // if(this.state.isLoading){
-    //   return(
-    //     <View style={{flex: 1, justifyContent: 'center'}}>
-    //       <ActivityIndicator color='#0000ff'/>
-    //     </View>
-    //   )
-    // }
+    if(state.albums.isLoading) {
+      return(
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          <ActivityIndicator color='#0000ff'/>
+        </View>
+      )
+    }
 
     return(
       <View style={{flex: 1, paddingTop: 20}}>
         <FlatList
-          data={state}
+          data={state.albums.data}
           renderItem={this._renderItem}
           keyExtractor={(item, index) => index}
         />

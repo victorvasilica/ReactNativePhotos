@@ -15,12 +15,13 @@ const defaultState = {
   }
 }
 
-const fetcher = (state = { defaultState }, action) => {
+const fetcher = (state = defaultState, action) => {
   switch (action.type) {
     case 'FETCH_ALBUMS':
       return {
         ...state,
         albums: {
+          ...state.albums,
           isLoading: true
         }
       };
@@ -36,6 +37,7 @@ const fetcher = (state = { defaultState }, action) => {
       return {
         ...state,
         photos: {
+          ...state.photos,
           isLoading: true
         }
       };
@@ -54,6 +56,7 @@ const fetcher = (state = { defaultState }, action) => {
 
 export default class App extends React.Component {
   render() {
+    console.log(defaultState);
     return (
       <Provider store={createStore(fetcher)}>
         <NavigatorIOS
