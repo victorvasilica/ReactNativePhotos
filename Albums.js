@@ -35,13 +35,13 @@ export default class Albums extends React.Component {
     this.state = {isLoading: true}
   }
 
-  _getAlbums() {
+  _getAlbums(store) {
     return fetch('https://jsonplaceholder.typicode.com/albums')
     .then((response) => response.json())
     .then((responseJson) => {
-      this.setState({
-        isLoading: false,
-        dataSource: responseJson,
+      store.dispatch({
+        type: 'FETCH_ALBUMS',
+        albums: responseJson
       });
     })
     .catch((error) => {
@@ -50,7 +50,16 @@ export default class Albums extends React.Component {
   }
 
   componentDidMount() {
-    this._getAlbums();
+    const store = this.props.store;
+
+    store.subscribe(() => {
+      this.setState({
+        isLoading: false,
+        dataSource: store.getState()
+      });
+    });
+    
+    this._getAlbums(store);
   }
 
   _onPressItem = (index, item) => {

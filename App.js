@@ -23,7 +23,8 @@ export default class App extends React.Component {
         style={styles.container}
         initialRoute={{
           title: '',
-          component: Albums
+          component: Albums,
+          passProps: {store: store}
         }}/>
     );
   }
