@@ -10,11 +10,12 @@ class AlbumItem extends React.PureComponent {
     const title = item.title;
 
     return (
-      <TouchableHighlight onPress={this._onPress}>
+      <TouchableHighlight underlayColor='#E1F5FE' onPress={this._onPress}>
         <View>
           <View style={styles.rowContainer}>
+            <View style={styles.bullet} />
             <View style={styles.textContainer}>
-              <Text>{title}</Text>
+              <Text style={styles.text}>{title}</Text>
             </View>
           </View>
           <View style={styles.separator} />
@@ -53,7 +54,7 @@ export default class Albums extends React.Component {
     if (state.albums.isLoading) {
       return (
         <View style={styles.activityIndicator}>
-          <ActivityIndicator color='#0000ff' />
+          <ActivityIndicator size='large' color='#03A9F4' />
         </View>
       )
     }
@@ -63,7 +64,7 @@ export default class Albums extends React.Component {
         <FlatList
           data={state.albums.data}
           renderItem={this._renderItem}
-          keyExtractor={(item, index) => index}
+          keyExtractor={(item, index) => index.toString()}
         />
       </View>
     );
@@ -102,7 +103,7 @@ export default class Albums extends React.Component {
   _onPressItem = (index, item) => {
     this.props.navigator.push({
       title: 'Album',
-      backButtonTitle: '',
+      backButtonTitle: ' ',
       component: Photos,
       passProps: { album: item }
     });
@@ -116,14 +117,25 @@ Albums.contextTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 20
+    padding: 0
+  },
+  bullet: {
+    width: 8,
+    marginTop: 4,
+    marginBottom: 4,
+    backgroundColor: '#E1F5FE'
   },
   textContainer: {
-    flex: 1
+    flex: 1,
+    padding: 8
+  },
+  text: {
+    fontFamily: 'Avenir Next',
+    fontSize: 16
   },
   separator: {
     height: 1,
-    backgroundColor: '#dddddd'
+    backgroundColor: '#E1F5FE'
   },
   rowContainer: {
     flexDirection: 'row',

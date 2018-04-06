@@ -9,12 +9,12 @@ class PhotoItem extends React.PureComponent {
     const title = item.title;
 
     return (
-      <TouchableHighlight onPress={this._onPress}>
+      <TouchableHighlight underlayColor='#E1F5FE' onPress={this._onPress}>
         <View>
           <View style={styles.rowContainer}>
             <Image style={styles.thumb} source={{ uri: item.thumbnailUrl }} />
             <View style={styles.textContainer}>
-              <Text>{title}</Text>
+              <Text style={styles.text}>{title}</Text>
             </View>
           </View>
           <View style={styles.separator} />
@@ -63,7 +63,7 @@ export default class Photos extends React.Component {
         <FlatList
           data={state.photos.data}
           renderItem={this._renderItem}
-          keyExtractor={(item, index) => index}
+          keyExtractor={(item, index) => index.toString()}
         />
       </View>
     );
@@ -102,7 +102,7 @@ export default class Photos extends React.Component {
   _onPressItem = (index, item) => {
     this.props.navigator.push({
       title: item.title,
-      backButtonTitle: '',
+      backButtonTitle: ' ',
       component: PhotoDetails,
       passProps: { photo: item }
     });
@@ -116,22 +116,30 @@ Photos.contextTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 20
+    padding: 0
   },
   thumb: {
     width: 80,
     height: 80,
-    marginRight: 10
+    marginRight: 8,
+    marginLeft: 8,
   },
   textContainer: {
-    flex: 1
+    flex: 1,
+    justifyContent: 'center',
+    padding: 8
+  },
+  text: {
+    fontFamily: 'Avenir Next',
+    fontSize: 16
   },
   separator: {
     height: 1,
-    backgroundColor: '#dddddd'
+    backgroundColor: '#E1F5FE'
   },
   rowContainer: {
     flexDirection: 'row',
+    justifyContent: 'center',
     padding: 10
   },
   activityIndicator: {

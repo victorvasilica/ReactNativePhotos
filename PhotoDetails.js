@@ -21,9 +21,9 @@ const styles = StyleSheet.create({
   image: {
     position: 'absolute',
     top: 0,
-    left: 0,
+    left: 12,
     bottom: 0,
-    right: 0,
+    right: 12,
     resizeMode: 'contain'
   },
 });
