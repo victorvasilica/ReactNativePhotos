@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, NavigatorIOS } from 'react-native';
 import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 import Albums from './Albums';
 
 const fetcher = (state = [], action) => {
@@ -12,20 +13,19 @@ const fetcher = (state = [], action) => {
     default:
       return state;
   }
-}
-
-const store = createStore(fetcher);
+};
 
 export default class App extends React.Component {
   render() {
     return (
-      <NavigatorIOS
-        style={styles.container}
-        initialRoute={{
-          title: '',
-          component: Albums,
-          passProps: {store: store}
-        }}/>
+      <Provider store={createStore(fetcher)}>
+        <NavigatorIOS
+          style={styles.container}
+          initialRoute={{
+            title: '',
+            component: Albums
+          }}/>
+        </Provider>
     );
   }
 }

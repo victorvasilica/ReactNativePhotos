@@ -1,5 +1,7 @@
 import React from 'react';
 import { Text, View, ActivityIndicator, FlatList, StyleSheet, TouchableHighlight } from 'react-native';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import Photos from './Photos';
 
 class AlbumItem extends React.PureComponent {
@@ -32,7 +34,7 @@ class AlbumItem extends React.PureComponent {
 export default class Albums extends React.Component {
   constructor(props){
     super(props);
-    this.state = {isLoading: true}
+    // this.state = {isLoading: false}
   }
 
   _getAlbums(store) {
@@ -50,16 +52,17 @@ export default class Albums extends React.Component {
   }
 
   componentDidMount() {
-    const store = this.props.store;
+    const { store } = this.context;
 
-    store.subscribe(() => {
-      this.setState({
-        isLoading: false,
-        dataSource: store.getState()
-      });
+    this.unsubscribe = store.subscribe(() => {
+      this.forceUpdate();
     });
     
     this._getAlbums(store);
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
   }
 
   _onPressItem = (index, item) => {
@@ -81,20 +84,22 @@ export default class Albums extends React.Component {
     );
   };
 
-  render(){
+  render() {
+    const { store } = this.context;
+    const state = store.getState();
 
-    if(this.state.isLoading){
-      return(
-        <View style={{flex: 1, justifyContent: 'center'}}>
-          <ActivityIndicator color='#0000ff'/>
-        </View>
-      )
-    }
+    // if(this.state.isLoading){
+    //   return(
+    //     <View style={{flex: 1, justifyContent: 'center'}}>
+    //       <ActivityIndicator color='#0000ff'/>
+    //     </View>
+    //   )
+    // }
 
     return(
       <View style={{flex: 1, paddingTop: 20}}>
         <FlatList
-          data={this.state.dataSource}
+          data={state}
           renderItem={this._renderItem}
           keyExtractor={(item, index) => index}
         />
@@ -102,6 +107,10 @@ export default class Albums extends React.Component {
     );
   }
 }
+
+Albums.contextTypes = {
+  store: PropTypes.object
+};
 
 const styles = StyleSheet.create({
     textContainer: {
