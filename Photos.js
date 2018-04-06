@@ -33,7 +33,7 @@ class PhotoItem extends React.PureComponent {
 
 export default class Photos extends React.Component {
   componentDidMount() {
-    const { store } = this.context;
+    const store  = this.context.store;
 
     this.unsubscribe = store.subscribe(() => {
       this.forceUpdate();
@@ -47,7 +47,7 @@ export default class Photos extends React.Component {
   }
 
   render() {
-    const { store } = this.context;
+    const store = this.context.store;
     const state = store.getState();
 
     if (state.photos.isLoading) {

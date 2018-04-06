@@ -33,7 +33,7 @@ class AlbumItem extends React.PureComponent {
 
 export default class Albums extends React.Component {
   componentDidMount() {
-    const { store } = this.context;
+    const store = this.context.store;
 
     this.unsubscribe = store.subscribe(() => {
       this.forceUpdate();
@@ -47,7 +47,7 @@ export default class Albums extends React.Component {
   }
 
   render() {
-    const { store } = this.context;
+    const store = this.context.store;
     const state = store.getState();
 
     if (state.albums.isLoading) {
