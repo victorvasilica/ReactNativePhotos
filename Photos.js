@@ -32,10 +32,6 @@ class PhotoItem extends React.PureComponent {
 }
 
 export default class Photos extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     const { store } = this.context;
 
