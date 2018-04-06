@@ -10,7 +10,7 @@ class AlbumItem extends React.PureComponent {
     const title = item.title;
 
     return (
-      <TouchableHighlight onPress={this._onPress} underlayColor='#E1F5FE'>
+      <TouchableHighlight underlayColor='#E1F5FE' onPress={this._onPress}>
         <View>
           <View style={styles.rowContainer}>
             <View style={styles.bullet} />
@@ -103,7 +103,7 @@ export default class Albums extends React.Component {
   _onPressItem = (index, item) => {
     this.props.navigator.push({
       title: 'Album',
-      backButtonTitle: '',
+      backButtonTitle: ' ',
       component: Photos,
       passProps: { album: item }
     });
@@ -117,20 +117,17 @@ Albums.contextTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 0,
-    paddingLeft: 0,
-    paddingRight: 0,
+    padding: 0
   },
   bullet: {
     width: 8,
+    marginTop: 4,
+    marginBottom: 4,
     backgroundColor: '#E1F5FE'
   },
   textContainer: {
     flex: 1,
-    paddingTop: 8,
-    paddingBottom: 8,
-    paddingLeft: 8,
-    paddingRight: 8
+    padding: 8
   },
   text: {
     fontFamily: 'Avenir Next',
