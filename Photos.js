@@ -24,9 +24,9 @@ class PhotoItem extends React.PureComponent {
               <Text>{title}</Text>
             </View>
           </View>
-          <View style={styles.separator}/>
+          <View style={styles.separator} />
         </View>
-      </TouchableHighlight>  
+      </TouchableHighlight>
     );
   }
 }
@@ -42,7 +42,7 @@ export default class Photos extends React.Component {
     this.unsubscribe = store.subscribe(() => {
       this.forceUpdate();
     });
-    
+
     this._getPhotos(this.props.album.id, store);
   }
 
@@ -58,19 +58,19 @@ export default class Photos extends React.Component {
     const url = 'https://jsonplaceholder.typicode.com/albums/' + albumId + '/photos';
 
     return fetch(url)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      store.dispatch({
-        type: 'UPDATE_PHOTOS',
-        photos: responseJson
+      .then((response) => response.json())
+      .then((responseJson) => {
+        store.dispatch({
+          type: 'UPDATE_PHOTOS',
+          photos: responseJson
+        });
+      })
+      .catch((error) => {
+        console.error(error);
       });
-    })
-    .catch((error) => {
-      console.error(error);
-    });
   }
 
-  _renderItem = ({item, index}) => {
+  _renderItem = ({ item, index }) => {
     return (
       <PhotoItem
         item={item}
@@ -82,27 +82,27 @@ export default class Photos extends React.Component {
 
   _onPressItem = (index, item) => {
     this.props.navigator.push({
-        title: item.title,
-        backButtonTitle: '',
-        component: PhotoDetails,
-        passProps: {photo: item}
-      });
-   }
+      title: item.title,
+      backButtonTitle: '',
+      component: PhotoDetails,
+      passProps: { photo: item }
+    });
+  }
 
-  render(){
+  render() {
     const { store } = this.context;
     const state = store.getState();
 
-    if(state.photos.isLoading){
-      return(
-        <View style={{flex: 1, justifyContent: 'center'}}>
-          <ActivityIndicator color='#0000ff'/>
+    if (state.photos.isLoading) {
+      return (
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+          <ActivityIndicator color='#0000ff' />
         </View>
       )
     }
 
-    return(
-      <View style={{flex: 1, paddingTop: 20}}>
+    return (
+      <View style={{ flex: 1, paddingTop: 20 }}>
         <FlatList
           data={state.photos.data}
           renderItem={this._renderItem}
